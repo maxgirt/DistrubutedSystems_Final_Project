@@ -1,0 +1,15 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>UCodeD</groupId>
+    <artifactId>assignement_2</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>core</module>
+        <module>database</module>
+        <module>broker</module>
+        <!--<module>client</module>-->
+    </modules>
+
+</project>
