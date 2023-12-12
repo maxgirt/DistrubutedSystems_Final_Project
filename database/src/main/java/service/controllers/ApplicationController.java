@@ -21,22 +21,34 @@ import java.net.UnknownHostException;
 
 
 import service.core.Problem;
+import service.core.TestCase;
+import service.core.Submission;
 @RestController 
 public class ApplicationController {
     //---------------------------------------------Problem
     public static int idProblem;
     private Map<String, Problem> problems = new TreeMap<>();
+
+    //@jsonview
     @PostMapping(value="/problems", consumes="application/json") 
-    public ResponseEntity<Problem> createProblem( @RequestBody Problem problem) {         
+    public ResponseEntity<Problem> createProblem( @RequestBody Problem problem) {
+
         problem.id = idProblem ++;
         problems.put(Integer.toString(problem.id),problem);
+        System.out.println(problem.testCases);
+
+        //debuging for problem TestCase
+        /*for(TestCase test: problem.testCases){
+            System.out.println(test.input+"-"+test.output);
+        }*/
+
         String url = "http://"+getHost()+"/problems/" + problem.id; 
         return ResponseEntity .status(HttpStatus.CREATED) .header("Location", url) 
                               .header("Content-Location", url) .body(problem);
     }
 
 
-    @GetMapping(value="/problems", produces="problems/json") 
+    @GetMapping(value="/problems", produces="application/json") 
     public ResponseEntity<ArrayList<String>> getProblem() { 
         ArrayList<String> list = new ArrayList<>(); 
         for (Problem problem : problems.values()) {
@@ -59,7 +71,6 @@ public class ApplicationController {
     @Value("${server.port}")
     private int port;
     private String getHost() {
-        
         try { 
             return InetAddress.getLocalHost().getHostAddress() + ":" + port; 
         } catch (UnknownHostException e) { 

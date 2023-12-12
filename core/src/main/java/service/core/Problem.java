@@ -7,16 +7,13 @@ import java.util.ArrayList;
  *
  */
 public class Problem {
-	public static int counterProb = 0;
 	public Problem(String title, String description, ArrayList<TestCase> testCase) {
-		id = counterProb++;
 		this.title = title;
 		this.description = description;
 		this.testCases = testCase;
 	}
 	
 	public Problem() {}
-
 	/**
 	 * Public fields are used as modern best practice argues that use of set/get
 	 * methods is unnecessary as (1) set/get makes the field mutable anyway, and

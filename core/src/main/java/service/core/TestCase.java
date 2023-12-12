@@ -1,20 +1,16 @@
 package service.core;
 
-
-
-
 /**
- * Class to store the Submission return by graderService
+ * Class to store a test case in a submission
  * 
  *
  */
 public class TestCase {
-	public static int counterSub = 0;
-	public TestCase() {}
 	public TestCase(String input, String output) {
 		this.input = input;
         this.output = output;
 	}
+    public TestCase() {}
 	public String input;
     public String output;
 }

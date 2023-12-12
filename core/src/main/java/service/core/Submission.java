@@ -1,26 +1,24 @@
 package service.core;
 
-
-
-
 /**
  * Class to store the Submission return by graderService
  * 
  *
  */
-public class Submission {
-	
-	
-	public static int counterSub = 0;
-	public Submission() {}
+public class Submission {	
 	public Submission(int idProblem, String code,ProgLanguage progLanguage,Result result) {
-		this.idSubmission = counterSub++;
+		this.idProblem = idProblem;
 		this.code = code;
 		this.progLanguage = progLanguage;
-		this.result = Result.wait;
 	}
+	public Submission(SubmissionRequest submissionRequest,int idSubmission, Result result) {
+		this.idProblem = submissionRequest.idProblem;
+		this.code = submissionRequest.code;
+		this.progLanguage = submissionRequest.progLanguage;
+	}
+	public Submission() {}
 	
-	public int idSubmission;
+	public int id;
 	public int idProblem;
 	//public int idUser;
 	public String code;
