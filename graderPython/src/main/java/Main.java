@@ -3,17 +3,20 @@ import javax.jms.*;
 
 import jdk.javadoc.internal.doclets.toolkit.util.SummaryAPIListBuilder;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import service.core.Result;
 import service.core.Submission;
+
+import static service.core.Result.corect;
 
 public class Main {
     public static void main(String[] args) {
         try{
 
             //initialisations connections (diffenrent one for the liason with the client and service)
-            ConnectionFactory factory = new ActiveMQConnectionFactory("failover://tcp://localhost:61616");
+            ConnectionFactory factory =
+                    new ActiveMQConnectionFactory("failover://tcp://localhost:61616");
             Connection connection = factory.createConnection();
-            System.out.println("connection broker - broker message Ok");
-            connection.setClientID("broker<->pythonGrader");
+            connection.setClientID("grader");
             Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
             Queue submissions = session.createQueue("SUBMISSIONS");
@@ -24,6 +27,7 @@ public class Main {
             consumer.setMessageListener(new MessageListener() {
                 @Override
                 public void onMessage(Message message) {
+                    System.out.println("Processing Message");
                     try {
                         Submission submission = (Submission) ((ObjectMessage) message).getObject();
                         String code = submission.code;
@@ -31,9 +35,9 @@ public class Main {
                         //SubmissionMessage submissionMessage = (SubmissionMessage) ((SubmissionMessage) messageSubmission).getObject();
                         //System.out.println("broker  : QuotationMessage recieve (token: "+messageSubmission.getToken()+")");
                         //service.evaluateSubmission()
-                        // Message response = session.createObjectMessage(
-                        //                        new ResultMessage(submissionMessage.getToken(),Result.corect, 42));
-                        //producer.send(response);
+                        submission.result = corect;
+                        Message response = session.createObjectMessage(submission);
+                        producer.send(response);
                         //messageSubmission.acknowledge();
                     } catch (JMSException e) {
                         throw new RuntimeException(e);
@@ -42,9 +46,11 @@ public class Main {
 
 
             });
+            connection.start();
         } catch (Exception e){
             System.out.println("error initialisations");
             e.printStackTrace();
         }
+
     }
 }

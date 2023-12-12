@@ -2,6 +2,7 @@ package service.controllers;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import javax.jms.*;
+import java.net.InetAddress;
 
 import java.util.Collection;
 import java.util.Map;
@@ -40,19 +41,32 @@ import java.io.Serializable;
 @RestController 
 public class ApplicationController {
     public final int PortDatabase = 8083;
-    public ApplicationController() throws JMSException {
-        ConnectionFactory factory = new ActiveMQConnectionFactory("failover://tcp://localhost:61616");
-        Connection connection = factory.createConnection();
-        System.out.println("connection broker - broker message Ok");
-        connection.setClientID("broker");
-        Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+    private MessageConsumer submissionConsumer;
+    private MessageProducer submissionProducer;
+    private Session session;
 
+
+    public ApplicationController() throws JMSException, UnknownHostException {
+        ConnectionFactory factory =
+                new ActiveMQConnectionFactory("failover://tcp://localhost:61616");
+        Connection connection = factory.createConnection();
+        connection.setClientID("broker");
+        this.session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
         Queue submissions = session.createQueue("SUBMISSIONS");
         Queue results = session.createQueue("RESULTS");
 
-        MessageConsumer consumer = session.createConsumer(results);
-        MessageProducer producer = session.createProducer(submissions);
+        this.submissionConsumer = this.session.createConsumer(results);
+        this.submissionProducer = this.session.createProducer(submissions);
+        System.out.println("Broker initialized");
+    }
+
+    @PostMapping(value="/submission", consumes="application/json")
+    public ResponseEntity<Submission> submitSolution(@RequestBody Submission submission) throws JMSException {
+        System.out.println(submission.code);
+        Message response = this.session.createObjectMessage(submission);
+        this.submissionProducer.send(response);
+        return ResponseEntity.status(HttpStatus.OK).body(submission);
     }
 
     //---------------------------------------------Problem
