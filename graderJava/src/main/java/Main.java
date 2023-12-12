@@ -1,7 +1,4 @@
-import service.core.Result;
 
-import service.message.SubmissionMessage;
-import service.message.ResultMessage;
 
 import javax.jms.*;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -28,18 +25,15 @@ public class Main {
             consumer.setMessageListener(new MessageListener() {
             @Override
                 public void onMessage(Message messageSubmission) {
-                    try{
-                        SubmissionMessage submissionMessage = (SubmissionMessage) ((SubmissionMessage) messageSubmission).getObject();
-                        System.out.println("broker  : QuotationMessage recieve (token: "+messageSubmission.getToken()+")");
+
+                        //SubmissionMessage submissionMessage = (SubmissionMessage) ((SubmissionMessage) messageSubmission).getObject();
+                        //System.out.println("broker  : QuotationMessage recieve (token: "+messageSubmission.getToken()+")");
                         //service.evaluateSubmission()
-                        Message response = session.createObjectMessage(
-                                                new ResultMessage(submissionMessage.getToken(),Result.corect, 42));
-                        producer.send(response);
-                        messageSubmission.acknowledge();
-                    } catch (JMSException e) {
-                        System.out.println("error recieve QuotationMessage");
-                        e.printStackTrace();
-                    }    
+                       // Message response = session.createObjectMessage(
+                        //                        new ResultMessage(submissionMessage.getToken(),Result.corect, 42));
+                        //producer.send(response);
+                        //messageSubmission.acknowledge();
+
                 }
             });       
         } catch (Exception e){

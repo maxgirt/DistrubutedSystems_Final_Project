@@ -1,5 +1,7 @@
 package service.controllers;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
+import javax.jms.*;
 
 import java.util.Collection;
 import java.util.Map;
@@ -38,6 +40,21 @@ import java.io.Serializable;
 @RestController 
 public class ApplicationController {
     public final int PortDatabase = 8083;
+    public ApplicationController() throws JMSException {
+        ConnectionFactory factory = new ActiveMQConnectionFactory("failover://tcp://localhost:61616");
+        Connection connection = factory.createConnection();
+        System.out.println("connection broker - broker message Ok");
+        connection.setClientID("broker");
+        Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+
+
+        Queue submissions = session.createQueue("SUBMISSIONS");
+        Queue results = session.createQueue("RESULTS");
+
+        MessageConsumer consumer = session.createConsumer(results);
+        MessageProducer producer = session.createProducer(submissions);
+    }
+
     //---------------------------------------------Problem
     @PostMapping(value="/problems", consumes="application/json") 
     public ResponseEntity<Problem> createProblem(@RequestBody Problem problem) {     

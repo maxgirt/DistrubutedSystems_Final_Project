@@ -10,6 +10,7 @@
         <module>database</module>
         <module>broker</module>
         <module>graderJava</module>
+        <module>graderPython</module>
     </modules>
 
 </project>
