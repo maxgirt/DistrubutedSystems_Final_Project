@@ -6,4 +6,5 @@ service/core/Submission.class
 service/core/Problem.class
 service/core/ProgLanguage.class
 service/core/SubmissionRequest.class
+service/core/ResultFlag.class
 service/core/TestCase.class

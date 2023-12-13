@@ -1,6 +1,7 @@
 package service.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Class to store the Submission return by graderService
@@ -33,5 +34,5 @@ public class Submission implements java.io.Serializable {
 	//public int idUser;
 	public String code;
 	public ProgLanguage progLanguage;
-	public Result result;
+	public ArrayList<Result> results;
 }
