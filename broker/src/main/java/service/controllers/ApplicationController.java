@@ -42,9 +42,6 @@ import static service.core.ProgLanguage.python;
 @RestController
 public class ApplicationController {
     public final int PortDatabase = 8083;
-    private MessageConsumer submissionConsumer;
-    private MessageProducer submissionProducer;
-    private Queue results;
     private Session session;
     Map<ProgLanguage, MessageProducer> submissionsQueueMap = new HashMap<>();
 
@@ -56,15 +53,11 @@ public class ApplicationController {
         connection.setClientID("broker");
         this.session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
-
-        this.results = session.createQueue("RESULTS");
         Queue submissions_python = session.createQueue("SUBMISSIONS_PYTHON");
         Queue submissions_java = session.createQueue("SUBMISSIONS_JAVA");
 
         this.submissionsQueueMap.put(ProgLanguage.python, session.createProducer(submissions_python));
         this.submissionsQueueMap.put(ProgLanguage.java, session.createProducer(submissions_java));
-
-        this.submissionConsumer = this.session.createConsumer(results);
 
         connection.start();
         System.out.println("Broker initialized");
