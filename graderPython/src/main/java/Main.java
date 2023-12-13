@@ -19,11 +19,11 @@ public class Main {
             connection.setClientID("grader");
             Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
-            Queue submissions = session.createQueue("SUBMISSIONS");
+            Queue submissions = session.createQueue("SUBMISSIONS_PYTHON");
             Queue results = session.createQueue("RESULTS");
 
             MessageConsumer consumer = session.createConsumer(submissions);
-            MessageProducer producer = session.createProducer(results);
+            MessageProducer producer = session.createProducer(null);
             consumer.setMessageListener(new MessageListener() {
                 @Override
                 public void onMessage(Message message) {
@@ -36,8 +36,14 @@ public class Main {
                         //System.out.println("broker  : QuotationMessage recieve (token: "+messageSubmission.getToken()+")");
                         //service.evaluateSubmission()
                         submission.result = corect;
+
+
+                        message.acknowledge();
+
                         Message response = session.createObjectMessage(submission);
-                        producer.send(response);
+                        response.setJMSCorrelationID(String.valueOf(submission.id));
+
+                        producer.send(message.getJMSReplyTo(), response);
                         //messageSubmission.acknowledge();
                     } catch (JMSException e) {
                         throw new RuntimeException(e);
