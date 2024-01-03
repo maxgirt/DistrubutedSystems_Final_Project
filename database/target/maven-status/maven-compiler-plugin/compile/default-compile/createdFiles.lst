@@ -1,2 +1,11 @@
-service\Application.class
-service\controllers\ApplicationController.class
+service/entities/ProblemEntity.class
+service/controllers/SubmissionController.class
+service/controllers/ProblemController.class
+service/services/SubmissionServiceImpl.class
+service/Application.class
+service/repositories/SubmissionRepository.class
+service/services/ProblemServiceImpl.class
+service/repositories/ProblemRepository.class
+service/entities/SubmissionEntity.class
+service/services/SubmissionService.class
+service/services/ProblemService.class
