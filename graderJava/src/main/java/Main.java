@@ -76,7 +76,7 @@ public class Main {
 
         // ToDo: The test case execution could be parallelized
         for (TestCase testCase : testCases) {
-            System.out.println("Executing test case " + testCase.id);
+          //  System.out.println("Executing test case " + testCase.id);
             String[] javaArgs = new String[]{testCase.input};
             JavaTask task = new JavaTask(submission.code, javaArgs);
             Future<String> future = executor.submit(task);
