@@ -7,6 +7,7 @@
 
     <modules>
         <module>core</module>
+        <module>codingAssistant</module>
         <module>database</module>
         <module>broker</module>
         <module>graderJava</module>

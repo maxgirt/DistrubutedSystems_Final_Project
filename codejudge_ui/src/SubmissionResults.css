@@ -1,0 +1,22 @@
+.results-container {
+    margin-top: 20px;
+}
+
+.result-item {
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+.result-item.correct {
+    background-color: #4CAF50; /* Green for correct results */
+}
+
+.result-item.incorrect {
+    background-color: #F44336; /* Red for incorrect results */
+}
+
+p {
+    margin: 5px 0;
+}

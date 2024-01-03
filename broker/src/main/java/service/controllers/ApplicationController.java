@@ -37,9 +37,10 @@ import service.message.ResultMessage;
 import java.io.Serializable;
 
 import static service.core.ProgLanguage.python;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class ApplicationController {
     public final int PortDatabase = 8083;
     private Session session;
