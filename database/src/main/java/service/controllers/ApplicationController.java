@@ -47,6 +47,13 @@
 //                               .header("Content-Location", url) .body(problem);
 //     }
 
+    @GetMapping(value="/testcases/{problem_id}", produces="application/json")
+    public ResponseEntity<ArrayList<TestCase>> getTestCases() {
+        ArrayList<TestCase> list = new ArrayList<>();
+        // ToDo: Fetch the testcases from the databse and return them
+        return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
+
 
 //     @GetMapping(value="/problems", produces="application/json") 
 //     public ResponseEntity<ArrayList<String>> getProblem() { 

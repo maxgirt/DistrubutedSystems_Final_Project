@@ -1,10 +1,11 @@
+
 package service.controllers;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
+import javax.jms.*;
+import java.net.InetAddress;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.ArrayList;
+import java.util.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.jms.*;
+import javax.jms.Queue;
+
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import java.net.InetAddress;
@@ -33,11 +36,50 @@ import service.message.SubmissionMessage;
 import service.message.ResultMessage;
 import java.io.Serializable;
 
+import static service.core.ProgLanguage.python;
 
 
-@RestController 
+@RestController
 public class ApplicationController {
     public final int PortDatabase = 8083;
+    private Session session;
+    Map<ProgLanguage, MessageProducer> submissionsQueueMap = new HashMap<>();
+
+
+    public ApplicationController() throws JMSException, UnknownHostException {
+        ConnectionFactory factory =
+                new ActiveMQConnectionFactory("failover://tcp://localhost:61616");
+        Connection connection = factory.createConnection();
+        connection.setClientID("broker");
+        this.session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+
+        Queue submissions_python = session.createQueue("SUBMISSIONS_PYTHON");
+        Queue submissions_java = session.createQueue("SUBMISSIONS_JAVA");
+
+        this.submissionsQueueMap.put(ProgLanguage.python, session.createProducer(submissions_python));
+        this.submissionsQueueMap.put(ProgLanguage.java, session.createProducer(submissions_java));
+
+        connection.start();
+        System.out.println("Broker initialized");
+    }
+
+    @PostMapping(value="/submission", consumes="application/json")
+    public ResponseEntity<Submission> submitSolution(@RequestBody Submission submission) throws JMSException {
+        Queue tmpQueue = session.createTemporaryQueue();
+        MessageConsumer consumer = session.createConsumer(tmpQueue);
+
+        System.out.println(submission.code);
+        Message submissionMessage = this.session.createObjectMessage(submission);
+        submissionMessage.setJMSReplyTo(tmpQueue);
+        this.submissionsQueueMap.get(submission.progLanguage).send(submissionMessage);
+
+        Message responseMessage = consumer.receive();
+        responseMessage.acknowledge();
+        Submission result = (Submission) ((ObjectMessage) responseMessage).getObject();
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     //---------------------------------------------Problem
     @PostMapping(value="/problems", consumes="application/json") 
     public ResponseEntity<Problem> createProblem(@RequestBody Problem problem) {     
