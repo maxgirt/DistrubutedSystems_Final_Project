@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import service.core.TestCase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "problems")
 public class ProblemEntity {
@@ -14,7 +15,7 @@ public class ProblemEntity {
 
     private String title;
     private String description;
-    private ArrayList<TestCase> testCases;
+    private List<TestCase> testCases;
 
     // Constructor
     public ProblemEntity() {
@@ -46,11 +47,11 @@ public class ProblemEntity {
         this.description = description;
     }
 
-    public ArrayList<TestCase> getTestCases() {
+    public List<TestCase> getTestCases() {
         return testCases;
     }
 
-    public void setTestCases(ArrayList<TestCase> testCases) {
+    public void setTestCases(List<TestCase> testCases) {
         this.testCases = testCases;
     }
 }
