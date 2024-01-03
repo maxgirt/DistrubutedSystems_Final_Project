@@ -32,6 +32,7 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [problemId, setProblemId] = useState(1);
   const [results, setResults] = useState([])
+  const [help, setHelp] = useState("You can always ask our Ai Chatbot for help!")
 
   const handleChangeLanguage = (event) => {
     setLanguage(event.target.value);
@@ -90,6 +91,16 @@ function App() {
     }
   }, [problemId]);
 
+  const handleAiAssistance = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/ai_assistance', { request: code });
+      const aiResponse = response.data.request;
+      setHelp(aiResponse)  // Append AI response to the code
+    } catch (error) {
+      console.error('AI Assistance error:', error);
+    }
+  };
+
 
   const onChange = React.useCallback((val, viewUpdate) => {
     console.log('val:', val);
@@ -112,6 +123,7 @@ function App() {
             </select>
             <h2>Problem Name</h2>
             <p>Description of the problem...</p>
+            <p>{help}</p>
             <SubmissionResults results={results} />
           </div>
           <div className="editor-section">
@@ -131,7 +143,7 @@ function App() {
                 />
             <div className="buttons">
               <button onClick={handleSubmit} disabled={isSubmitting}>Submit Code</button>
-              <button>Get AI Assistance</button>
+              <button onClick={handleAiAssistance}>Get AI Assistance</button>
             </div>
           </div>
         </div>

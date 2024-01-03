@@ -32,6 +32,8 @@ import service.core.TestCase;
 import service.core.Submission;
 import service.core.ProgLanguage;
 import service.core.SubmissionRequest;
+import service.message.AiRequest;
+import service.message.AiResponse;
 import service.message.SubmissionMessage;
 import service.message.ResultMessage;
 import java.io.Serializable;
@@ -45,6 +47,7 @@ public class ApplicationController {
     public final int PortDatabase = 8083;
     private Session session;
     Map<ProgLanguage, MessageProducer> submissionsQueueMap = new HashMap<>();
+    private MessageProducer aiQueue;
 
 
     public ApplicationController() throws JMSException, UnknownHostException {
@@ -60,8 +63,29 @@ public class ApplicationController {
         this.submissionsQueueMap.put(ProgLanguage.python, session.createProducer(submissions_python));
         this.submissionsQueueMap.put(ProgLanguage.java, session.createProducer(submissions_java));
 
+        Queue ai_requests = session.createQueue("AI_REQUESTS");
+        this.aiQueue = session.createProducer(ai_requests);
+
         connection.start();
         System.out.println("Broker initialized");
+    }
+
+    @PostMapping(value = "/ai_assistance", consumes = "application/json")
+    public ResponseEntity<AiResponse> request_assistance(@RequestBody AiRequest request) throws JMSException{
+        Queue tmpQueue = session.createTemporaryQueue();
+        MessageConsumer consumer = session.createConsumer(tmpQueue);
+
+        System.out.println(request.getRequest());
+        Message aiRequestMessage = this.session.createObjectMessage(request);
+        aiRequestMessage.setJMSReplyTo(tmpQueue);
+
+        this.aiQueue.send(aiRequestMessage);
+
+        Message responseMessage = consumer.receive();
+        responseMessage.acknowledge();
+        AiResponse result = (AiResponse) ((ObjectMessage) responseMessage).getObject();
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PostMapping(value="/submission", consumes="application/json")
@@ -107,7 +131,7 @@ public class ApplicationController {
     @GetMapping(value="/problems", produces="application/json") 
     public ResponseEntity<ArrayList<String>> getProblem() { 
         RestTemplate template = new RestTemplate();
-        String urlService = "http://localhost:" +PortDatabase + "/problems";
+        String urlService = "http://localhost:" + PortDatabase + "/problems";
         ResponseEntity<ArrayList<String>> response = template.getForEntity(urlService,(Class<ArrayList<String>>) new ArrayList<String>().getClass());
         return ResponseEntity.status(HttpStatus.OK).body(response.getBody()); 
     }
