@@ -6,8 +6,7 @@ package service.core;
  *
  */
 public class TestCase {
-	public TestCase(String input, String output, Integer timeout, Integer problemId) {
-		this.problemId = problemId;
+	public TestCase(String input, String output, Integer timeout) {
 		this.input = input;
         this.output = output;
 		this.timeout = timeout;
@@ -18,6 +17,5 @@ public class TestCase {
 	public String input;
     public String output;
 	public Integer timeout;
-	public Integer problemId;
 	public Boolean hidden;
 }

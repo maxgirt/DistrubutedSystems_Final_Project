@@ -66,9 +66,9 @@ public class Main {
 
         // ToDo: query test cases from the database
         ArrayList<TestCase> testCases = new ArrayList<>();
-        testCases.add(new TestCase("3,2", "5", 1, 0));
-        testCases.add(new TestCase("6,2", "8", 1, 0));
-        testCases.add(new TestCase("14,0", "14", 1, 0));
+        testCases.add(new TestCase("3,2", "5", 1));
+        testCases.add(new TestCase("6,2", "8", 1));
+        testCases.add(new TestCase("14,0", "14", 1));
         testCases.get(2).hidden = true;
         System.out.println("Test cases loaded");
 
