@@ -1,0 +1,32 @@
+version: '3.6'
+services:
+  activemq:
+    container_name: activemq
+    image: rmohr/activemq:latest
+    ports:
+      - "8162:8161"
+      - "61612:61616"
+  broker:
+    build: broker
+    depends_on:
+      - activemq
+    network_mode: "service:activemq"
+    environment:
+      - HOSTNAME=localhost
+  grader_python:
+    build: graderPython
+    depends_on:
+      - broker
+    network_mode: "service:activemq"
+  coding_assistant:
+    build: codingAssistant
+    depends_on:
+      - broker
+    network_mode: "service:activemq"
+  client:
+    build: codejudge_ui
+    ports:
+      - "80:80"
+
+
+

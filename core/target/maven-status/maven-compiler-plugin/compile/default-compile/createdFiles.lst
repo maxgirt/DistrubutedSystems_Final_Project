@@ -1,0 +1,12 @@
+service/core/GraderService.class
+service/message/ResultMessage.class
+service/core/Result.class
+service/message/SubmissionMessage.class
+service/core/Submission.class
+service/core/Problem.class
+service/core/ProgLanguage.class
+service/message/AiRequest.class
+service/message/AiResponse.class
+service/core/SubmissionRequest.class
+service/core/ResultFlag.class
+service/core/TestCase.class
