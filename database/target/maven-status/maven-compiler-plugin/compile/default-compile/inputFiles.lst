@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /Users/paulermler/Downloads/DS Final Project/COMP41720/database/src/main/java/service/services/ProblemServiceImpl.java
 /Users/paulermler/Downloads/DS Final Project/COMP41720/database/src/main/java/service/controllers/ProblemController.java
 /Users/paulermler/Downloads/DS Final Project/COMP41720/database/src/main/java/service/services/SubmissionService.java
@@ -10,3 +11,18 @@
 /Users/paulermler/Downloads/DS Final Project/COMP41720/database/src/main/java/service/services/ProblemService.java
 /Users/paulermler/Downloads/DS Final Project/COMP41720/database/src/main/java/service/repositories/SubmissionRepository.java
 /Users/paulermler/Downloads/DS Final Project/COMP41720/database/src/main/java/service/controllers/ApplicationController.java
+=======
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/database_controllers/SubmissionController.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/repositories/ProblemRepository.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/database_entities/ProblemEntity.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/Application.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/services/ProblemServiceImpl.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/services/ProblemUtil.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/database_controllers/ApplicationController.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/services/SubmissionServiceImpl.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/services/SubmissionService.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/database_controllers/ProblemController.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/repositories/SubmissionRepository.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/services/ProblemService.java
+/Users/maxgirt/Documents/GitHub/COMP41720/database/src/main/java/service/database_entities/SubmissionEntity.java
+>>>>>>> test

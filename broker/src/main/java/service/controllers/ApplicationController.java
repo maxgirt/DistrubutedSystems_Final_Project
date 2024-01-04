@@ -7,6 +7,7 @@ import java.net.InetAddress;
 
 import java.util.*;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -41,6 +43,13 @@ import java.io.Serializable;
 import static service.core.ProgLanguage.python;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class ApplicationController {
@@ -48,6 +57,19 @@ public class ApplicationController {
     private Session session;
     Map<ProgLanguage, MessageProducer> submissionsQueueMap = new HashMap<>();
     private MessageProducer aiQueue;
+
+
+    // public SubmissionEntity convertToEntity(Submission submission) {
+    //     SubmissionEntity submissionEntity = new SubmissionEntity();
+    //     submissionEntity.setId(Integer.toString(submission.getId()));
+    //     submissionEntity.setIdProblem(submission.getIdProblem());
+    //     submissionEntity.setCode(submission.getCode());
+    //     submissionEntity.setProgLanguage(submission.getProgLanguage());
+    //     submissionEntity.setResults(submission.getResults());
+    //     // Set other fields as necessary
+    //     return submissionEntity;
+    // }
+
 
 
     public ApplicationController() throws JMSException, UnknownHostException {
@@ -92,19 +114,41 @@ public class ApplicationController {
     public ResponseEntity<Submission> submitSolution(@RequestBody Submission submission) throws JMSException {
         Queue tmpQueue = session.createTemporaryQueue();
         MessageConsumer consumer = session.createConsumer(tmpQueue);
-
+    
         System.out.println(submission.code);
         Message submissionMessage = this.session.createObjectMessage(submission);
         submissionMessage.setJMSReplyTo(tmpQueue);
         this.submissionsQueueMap.get(submission.progLanguage).send(submissionMessage);
-
+    
         Message responseMessage = consumer.receive();
         responseMessage.acknowledge();
         Submission result = (Submission) ((ObjectMessage) responseMessage).getObject();
-
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+    
+        // // Convert Submission to SubmissionEntity
+        // SubmissionEntity submissionEntity = convertToEntity(result);
+    
+        // Send a POST request to the Submission Controller endpoint
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Submission> request = new HttpEntity<>(result, headers);
+        
+        // Change the URL to where your Submission Controller is running
+        String submissionControllerUrl = "http://localhost:8083/submissions";
+        ResponseEntity<String> submissionResponse = restTemplate.postForEntity(submissionControllerUrl, request, String.class);
+    
+        // Return the original Submission response or handle the error
+        if (submissionResponse.getStatusCode().is2xxSuccessful()) {
+            System.out.println("Submission stored successfully!");
+            System.out.flush();
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } else {
+            // Handle the error appropriately
+            System.out.println("Failed to store the submission.");
+            System.out.flush();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
-
     //---------------------------------------------Problem
     @PostMapping(value="/problems", consumes="application/json") 
     public ResponseEntity<Problem> createProblem(@RequestBody Problem problem) {     
@@ -129,13 +173,17 @@ public class ApplicationController {
 
 
     @GetMapping(value="/problems", produces="application/json") 
-    public ResponseEntity<ArrayList<String>> getProblem() { 
+    public ResponseEntity<List<Problem>> getProblem() {
         RestTemplate template = new RestTemplate();
-        String urlService = "http://localhost:" + PortDatabase + "/problems";
-        ResponseEntity<ArrayList<String>> response = template.getForEntity(urlService,(Class<ArrayList<String>>) new ArrayList<String>().getClass());
+        String urlService = "http://localhost:" +PortDatabase + "/problems";
+        ResponseEntity<List<Problem>> response = template.exchange(
+            urlService,
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<List<Problem>>() {}
+        );
         return ResponseEntity.status(HttpStatus.OK).body(response.getBody()); 
     }
-
     @GetMapping(value="/problems/{id}", produces={"application/json"})
     public ResponseEntity<Problem> getProblem(@PathVariable String id) { 
         RestTemplate template = new RestTemplate();

@@ -13,6 +13,10 @@ public class Result implements java.io.Serializable {
         this.flag = flag;
     }
 
+    public Result() {
+        // Default constructor
+    }
+
     public ResultFlag flag;
     public String input;
     public String output;

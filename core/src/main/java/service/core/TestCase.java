@@ -7,7 +7,6 @@ package service.core;
  */
 public class TestCase {
 	public TestCase(String input, String output, Integer timeout) {
-
 		this.input = input;
         this.output = output;
 		this.timeout = timeout;

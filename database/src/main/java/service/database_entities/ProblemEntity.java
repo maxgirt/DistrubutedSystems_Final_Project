@@ -1,4 +1,4 @@
-package service.entities;
+package service.database_entities;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,10 +17,16 @@ public class ProblemEntity {
     private String description;
     private List<TestCase> testCases;
 
-    // Constructor
-    public ProblemEntity() {
-        // Default constructor
+    // Constructor with all fields
+    public ProblemEntity(String id, String title, String description, List<TestCase> testCases) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.testCases = testCases;
     }
+
+    // Default constructor
+    public ProblemEntity() {}
 
     // Getters and Setters
     public String getId() {

@@ -1,7 +1,8 @@
 package service.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import service.entities.ProblemEntity;
+
+import service.database_entities.ProblemEntity;
 import service.repositories.ProblemRepository;
 import java.util.List;
 import java.util.Optional;

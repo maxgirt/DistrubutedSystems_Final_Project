@@ -3,7 +3,8 @@ package service.repositories;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import service.entities.SubmissionEntity;
+
+import service.database_entities.SubmissionEntity;
 
 
 public interface SubmissionRepository extends MongoRepository<SubmissionEntity, String> {

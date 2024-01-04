@@ -35,6 +35,12 @@
             <version>1.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>UCodeD</groupId>
+            <artifactId>database</artifactId>
+            <version>1.1</version>
+        </dependency>
+
 
 
         <dependency>

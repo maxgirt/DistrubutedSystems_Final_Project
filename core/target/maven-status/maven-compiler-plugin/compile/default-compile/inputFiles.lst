@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /Users/paulermler/Downloads/DS Final Project/COMP41720/core/src/main/java/service/core/SubmissionRequest.java
 /Users/paulermler/Downloads/DS Final Project/COMP41720/core/src/main/java/service/core/ResultFlag.java
 /Users/paulermler/Downloads/DS Final Project/COMP41720/core/src/main/java/service/message/AiRequest.java
@@ -10,3 +11,15 @@
 /Users/paulermler/Downloads/DS Final Project/COMP41720/core/src/main/java/service/message/SubmissionMessage.java
 /Users/paulermler/Downloads/DS Final Project/COMP41720/core/src/main/java/service/core/Problem.java
 /Users/paulermler/Downloads/DS Final Project/COMP41720/core/src/main/java/service/core/Result.java
+=======
+/Users/maxgirt/Documents/GitHub/COMP41720/core/src/main/java/service/core/Problem.java
+/Users/maxgirt/Documents/GitHub/COMP41720/core/src/main/java/service/core/GraderService.java
+/Users/maxgirt/Documents/GitHub/COMP41720/core/src/main/java/service/core/TestCase.java
+/Users/maxgirt/Documents/GitHub/COMP41720/core/src/main/java/service/core/ProgLanguage.java
+/Users/maxgirt/Documents/GitHub/COMP41720/core/src/main/java/service/core/Submission.java
+/Users/maxgirt/Documents/GitHub/COMP41720/core/src/main/java/service/message/SubmissionMessage.java
+/Users/maxgirt/Documents/GitHub/COMP41720/core/src/main/java/service/message/ResultMessage.java
+/Users/maxgirt/Documents/GitHub/COMP41720/core/src/main/java/service/core/Result.java
+/Users/maxgirt/Documents/GitHub/COMP41720/core/src/main/java/service/core/SubmissionRequest.java
+/Users/maxgirt/Documents/GitHub/COMP41720/core/src/main/java/service/core/ResultFlag.java
+>>>>>>> test

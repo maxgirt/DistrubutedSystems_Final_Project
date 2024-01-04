@@ -1,9 +1,11 @@
-package service.controllers;
+package service.database_controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.entities.SubmissionEntity;
+
+import service.core.Submission;
+import service.database_entities.SubmissionEntity;
 import service.services.SubmissionService;
 
 import java.util.List;
@@ -11,6 +13,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/submissions") // all routes will be relative to /submissions
 public class SubmissionController {
+
+    public SubmissionEntity convertToEntity(Submission submission) {
+        SubmissionEntity submissionEntity = new SubmissionEntity();
+        submissionEntity.setId(Integer.toString(submission.getId()));
+        submissionEntity.setIdProblem(submission.getIdProblem());
+        submissionEntity.setCode(submission.getCode());
+        submissionEntity.setProgLanguage(submission.getProgLanguage());
+        submissionEntity.setResults(submission.getResults());
+        // Set other fields as necessary
+        System.out.println("SubmissionEntity: " + submissionEntity);
+        return submissionEntity;
+    }
+
+    
+
 
     private final SubmissionService submissionService;
 
@@ -20,9 +37,12 @@ public class SubmissionController {
     }
 
     @PostMapping
-    public ResponseEntity<SubmissionEntity> createSubmission(@RequestBody SubmissionEntity submission) {
-        SubmissionEntity newSubmission = submissionService.createOrUpdateSubmission(submission);
-        return ResponseEntity.ok(newSubmission);
+    public ResponseEntity<String> createSubmission(@RequestBody Submission submission) {
+        SubmissionEntity new_entity = convertToEntity(submission);
+        //
+
+        SubmissionEntity newSubmission = submissionService.createOrUpdateSubmission(new_entity);
+        return ResponseEntity.ok("Submission created successfully");
     }
 
     @GetMapping("/{id}")

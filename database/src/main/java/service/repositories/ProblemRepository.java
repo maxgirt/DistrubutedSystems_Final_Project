@@ -3,7 +3,8 @@ package service.repositories;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import service.entities.ProblemEntity;
+
+import service.database_entities.ProblemEntity;
 
 public interface ProblemRepository extends MongoRepository<ProblemEntity, String> {
     // Define custom query methods here if needed

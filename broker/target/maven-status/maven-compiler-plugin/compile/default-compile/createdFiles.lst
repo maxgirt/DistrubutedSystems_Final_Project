@@ -1,2 +1,6 @@
 service/Application.class
+<<<<<<< HEAD
+=======
+service/controllers/ApplicationController$1.class
+>>>>>>> test
 service/controllers/ApplicationController.class

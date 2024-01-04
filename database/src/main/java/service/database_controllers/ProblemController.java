@@ -1,9 +1,11 @@
-package service.controllers;
+package service.database_controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.entities.ProblemEntity;
+
+import service.core.TestCase;
+import service.database_entities.ProblemEntity;
 import service.services.ProblemService;
 
 import java.util.List;
@@ -53,5 +55,11 @@ public class ProblemController {
     public ResponseEntity<Void> deleteProblem(@PathVariable String id) {
         problemService.deleteProblemById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/testcases")
+    public ResponseEntity<List<TestCase>> getProblemTestCases(@PathVariable String id) {
+        ProblemEntity problem = problemService.getProblemById(id);
+        return problem != null ? ResponseEntity.ok(problem.getTestCases()) : ResponseEntity.notFound().build();
     }
 }
