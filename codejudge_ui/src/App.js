@@ -33,10 +33,12 @@ function App() {
   const [problemId, setProblemId] = useState(1);
   const [results, setResults] = useState([])
   const [help, setHelp] = useState("You can always ask our Ai Chatbot for help!")
-
+  const broker_port = process.env.BROKER_PORT;
   const handleChangeLanguage = (event) => {
     setLanguage(event.target.value);
   };
+
+
 
   const handleProblemIdChange = (event) => {
     setProblemId(event.target.value);
@@ -62,7 +64,7 @@ function App() {
 
     try {
       let response;
-      response = await axios.post('http://localhost:8080/submission', payload);
+      response = await axios.post('http://localhost:'+"8085"+'/submission', payload);
       // Handle the response as needed
       console.log(response)
       setResults(response.data.results)
@@ -78,7 +80,7 @@ function App() {
   useEffect(() => {
     const fetchProblemDescription = async () => {
       try {
-        const response = await axios.get(`/problems/${problemId}`);
+        const response = await axios.get(`'http://localhost:8085/problems/${problemId}`);
         setProblemDescription(response.data.description);
       } catch (error) {
         console.error('Error fetching problem description:', error);
@@ -93,7 +95,7 @@ function App() {
 
   const handleAiAssistance = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/ai_assistance', { request: code });
+      const response = await axios.post('http://localhost:'+"8085"+'/ai_assistance', { request: code });
       const aiResponse = response.data.request;
       setHelp(aiResponse)  // Append AI response to the code
     } catch (error) {

@@ -4,29 +4,76 @@ services:
     container_name: activemq
     image: rmohr/activemq:latest
     ports:
-      - "8162:8161"
-      - "61612:61616"
+      - "8160:8160"
+      - "61610:61610"
+    networks:
+      - judge_network
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+    networks:
+      - judge_network
+
   broker:
     build: broker
     depends_on:
       - activemq
-    network_mode: "service:activemq"
     environment:
-      - HOSTNAME=localhost
-  grader_python:
-    build: graderPython
-    depends_on:
-      - broker
-    network_mode: "service:activemq"
-  coding_assistant:
-    build: codingAssistant
-    depends_on:
-      - broker
-    network_mode: "service:activemq"
-  client:
-    build: codejudge_ui
+      - HOSTNAME=activeqm
+      - SERVER_PORT=8085
+    networks:
+      - judge_network
     ports:
-      - "80:80"
+      - "8085:8085"
+      - "8080:8080"
+#
+#  database:
+#    build: database
+#    depends_on:
+#      - broker
+#      - mongodb
+#    networks:
+#      - judge_network
+#    environment:
+#      - MONGODB_URI=mongodb://mongodb:27017/codehub
+#
+#  grader_python:
+#    build: graderPython
+#    depends_on:
+#      - broker
+#    environment:
+#      - QM_SERVER_HOST=activemq
+#      - QM_SERVER_PORT=61610
+#      - GRADER_ID=grader_1
+#    networks:
+#      - judge_network
+#
+#  coding_assistant:
+#    build: codingAssistant
+#    depends_on:
+#      - broker
+#      - mongodb
+#    environment:
+#      - QM_SERVER_HOST=activemq
+#      - QM_SERVER_PORT=61610
+#      - CLIENT_ID=ai_client_1
+#    networks:
+#      - judge_network
+#
+#  client:
+#    build: codejudge_ui
+#    depends_on:
+#      - broker
+#    ports:
+#      - "3000:3000"
+#      - "80:80"
+#    environment:
+#      - BROKER_PORT=8085
 
-
-
+networks:
+  judge_network:
+    driver: bridge

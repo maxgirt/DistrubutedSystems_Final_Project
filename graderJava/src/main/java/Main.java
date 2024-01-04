@@ -66,9 +66,9 @@ public class Main {
 
         // ToDo: query test cases from the database
         ArrayList<TestCase> testCases = new ArrayList<>();
-        testCases.add(new TestCase("3,2", "5", 1, 0));
-        testCases.add(new TestCase("6,2", "8", 1, 0));
-        testCases.add(new TestCase("14,0", "14", 1, 0));
+        testCases.add(new TestCase("3,2", "5", 1));
+        testCases.add(new TestCase("6,2", "8", 1));
+        testCases.add(new TestCase("14,0", "14", 1));
         testCases.get(2).hidden = true;
         System.out.println("Test cases loaded");
 
@@ -124,11 +124,26 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            // ToDo: get the hostname and the grader_id and the programming language from the arguments
+
+            String qm_serverHost = System.getenv("QM_SERVER_HOST");
+            if (qm_serverHost == null || qm_serverHost.isEmpty()) {
+                qm_serverHost = "localhost";  // Default to localhost if not set (helpful for local testing)
+            }
+            String qm_port = System.getenv("QM_SERVER_PORT");
+            if (qm_port == null || qm_port.isEmpty()) {
+                qm_port = "61616";  // Default to localhost if not set (helpful for local testing)
+            }
+            String grader_id = System.getenv("GRADER_ID");
+            if (grader_id == null || grader_id.isEmpty()) {
+                grader_id = "grader";  // Default to localhost if not set (helpful for local testing)
+            }
+
+            System.out.println(grader_id+qm_port+qm_serverHost);
+
             ConnectionFactory factory =
-                    new ActiveMQConnectionFactory("failover://tcp://localhost:61616");
+                    new ActiveMQConnectionFactory("failover://tcp://"+qm_serverHost+":"+qm_port);
             Connection connection = factory.createConnection();
-            connection.setClientID("grader");
+            connection.setClientID(grader_id);
             Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
             Queue submissions = session.createQueue("SUBMISSIONS_JAVA");
