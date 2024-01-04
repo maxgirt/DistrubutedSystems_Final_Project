@@ -22,6 +22,7 @@ public class SubmissionController {
         submissionEntity.setProgLanguage(submission.getProgLanguage());
         submissionEntity.setResults(submission.getResults());
         // Set other fields as necessary
+        System.out.println("SubmissionEntity: " + submissionEntity);
         return submissionEntity;
     }
 
