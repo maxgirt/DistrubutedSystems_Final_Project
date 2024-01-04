@@ -1,7 +1,8 @@
 package service.services;
-import service.entities.ProblemEntity;
 import java.util.List;
 import java.util.Optional;
+
+import service.database_entities.ProblemEntity;
 
 public interface ProblemService {
     public List<ProblemEntity> getAllProblems();

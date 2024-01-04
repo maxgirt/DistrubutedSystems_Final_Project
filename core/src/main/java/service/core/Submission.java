@@ -30,4 +30,26 @@ public class Submission implements Serializable {
     }
 
     public Submission() {}
+
+    public String getIdProblem() {
+        return idProblem;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public ProgLanguage getProgLanguage() {
+        return progLanguage;
+    }
+
+    public ArrayList<Result> getResults() {
+        return results;
+    }
+
+    //get id
+    public int getId() {
+        return id;
+    }
+    
 }

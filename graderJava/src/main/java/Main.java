@@ -4,13 +4,25 @@ import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.*;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import service.core.Result;
 import service.core.ResultFlag;
 import service.core.Submission;
 import service.core.TestCase;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.concurrent.*;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
+
 
 public class Main {
 
@@ -23,6 +35,8 @@ public class Main {
             this.code = code;
             this.args = args;
         }
+
+
 
         @Override
         public String call() throws Exception {
@@ -59,17 +73,51 @@ public class Main {
             }
         }
     }
+    private static ArrayList<TestCase> getTestCasesFromService(String idProblem) {
+        String urlString = "http://localhost:8083/problems/" + idProblem + "/testcases"; 
+        ArrayList<TestCase> testCases = new ArrayList<>();
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.connect();
+
+            int responsecode = conn.getResponseCode();
+            if (responsecode != 200) {
+                throw new RuntimeException("HttpResponseCode: " + responsecode);
+            } else {
+                String inline = "";
+                Scanner scanner = new Scanner(url.openStream());
+
+                while (scanner.hasNext()) {
+                    inline += scanner.nextLine();
+                }
+                scanner.close();
+
+                Gson gson = new Gson();
+                testCases = gson.fromJson(inline, new TypeToken<ArrayList<TestCase>>(){}.getType());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Java Test cases loaded");
+        return testCases;
+    }
+
 
     private static Submission judge(Submission submission) {
         submission.results = new ArrayList<>();
         System.out.println("Judging submission " + submission.id);
 
+        // Retrieve test cases from the database service
+        ArrayList<TestCase> testCases = getTestCasesFromService(submission.idProblem);
+
         // ToDo: query test cases from the database
-        ArrayList<TestCase> testCases = new ArrayList<>();
-        testCases.add(new TestCase("3,2", "5", 1));
-        testCases.add(new TestCase("6,2", "8", 1));
-        testCases.add(new TestCase("14,0", "14", 1));
-        testCases.get(2).hidden = true;
+        // ArrayList<TestCase> testCases = new ArrayList<>();
+        // testCases.add(new TestCase("3,2", "5", 1));
+        // testCases.add(new TestCase("6,2", "8", 1));
+        // testCases.add(new TestCase("14,0", "14", 1));
+        // testCases.get(2).hidden = true;
         System.out.println("Test cases loaded");
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -103,7 +151,7 @@ public class Main {
                     testCaseResult = result;
                 }
 
-                if (result != null && result.equals(testCase.output)) {
+                if (result.trim().equals(testCase.output.trim())) {
                     System.out.println("Test passed");
                     submission.results.add(new Result(testCaseInput, testCaseOutput, testCaseResult, ResultFlag.corect));
                 } else {

@@ -10,7 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import service.core.TestCase;
-import service.entities.ProblemEntity;
+import service.database_entities.ProblemEntity;
 import service.services.ProblemService;
 
 @SpringBootApplication 
@@ -72,8 +72,27 @@ public class Application{
                 testCases4.add(new TestCase("", "Hello World", defaultTimeout));
                 problem4.setTestCases(testCases4);
                 ProblemService.createOrUpdateProblem(problem4);
+
+                ProblemEntity problem5 = new ProblemEntity();
+                problem5.setTitle("Add Two Numbers");
+                problem5.setDescription("Given two integers, return the sum of the two integers");
+                List<TestCase> testCases5 = new ArrayList<>();
+                testCases5.add(new TestCase("1,2", "3", defaultTimeout));
+                testCases5.add(new TestCase("0,0", "0", defaultTimeout));
+                testCases5.add(new TestCase("-1,1", "0", defaultTimeout));
+                problem5.setTestCases(testCases5);
+                ProblemService.createOrUpdateProblem(problem5);
                 
+                ProblemEntity problem6 = new ProblemEntity();
+                problem6.setTitle("Return 0");
+                problem6.setDescription("Return 0");
+                List<TestCase> testCases6 = new ArrayList<>();
+                testCases6.add(new TestCase("", "0", defaultTimeout));
+                problem6.setTestCases(testCases6);
+                ProblemService.createOrUpdateProblem(problem6);
                 
+
+                System.out.println("Problems created successfully");
             }
             else {
                 System.out.println("Problems found in the database, skipping creation...");

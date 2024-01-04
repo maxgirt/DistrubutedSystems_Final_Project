@@ -1,7 +1,8 @@
 package service.services;
 
-import service.entities.SubmissionEntity;
 import java.util.List;
+
+import service.database_entities.SubmissionEntity;
 
 public interface SubmissionService {
     SubmissionEntity createOrUpdateSubmission(SubmissionEntity submission);

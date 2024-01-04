@@ -2,7 +2,8 @@ package service.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import service.entities.SubmissionEntity;
+
+import service.database_entities.SubmissionEntity;
 import service.repositories.SubmissionRepository;
 
 import java.util.List;
