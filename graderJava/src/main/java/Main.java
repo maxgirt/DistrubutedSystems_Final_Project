@@ -26,6 +26,13 @@ import com.google.gson.Gson;
 
 public class Main {
 
+    private static String getDatabaseHost(){
+        String databasename = System.getenv("DATABASE_NAME");
+        if (databasename == null || databasename.isEmpty()) {
+            databasename = "localhost";  // Default to localhost if not set (helpful for local testing)
+        }
+        return databasename;
+    }
         
     private static class JavaTask implements Callable<String> {
         private final String code;
@@ -35,6 +42,7 @@ public class Main {
             this.code = code;
             this.args = args;
         }
+
 
 
 
@@ -74,7 +82,7 @@ public class Main {
         }
     }
     private static ArrayList<TestCase> getTestCasesFromService(String idProblem) {
-        String urlString = "http://localhost:8083/problems/" + idProblem + "/testcases"; 
+        String urlString = "http://"+getDatabaseHost()+":8083/problems/" + idProblem + "/testcases";
         ArrayList<TestCase> testCases = new ArrayList<>();
         try {
             URL url = new URL(urlString);
@@ -173,11 +181,11 @@ public class Main {
     public static void main(String[] args) {
         try {
 
-            String qm_serverHost = System.getenv("QM_SERVER_HOST");
+            String qm_serverHost = System.getenv("MQ_SERVER_HOST");
             if (qm_serverHost == null || qm_serverHost.isEmpty()) {
                 qm_serverHost = "localhost";  // Default to localhost if not set (helpful for local testing)
             }
-            String qm_port = System.getenv("QM_SERVER_PORT");
+            String qm_port = System.getenv("MQ_SERVER_PORT");
             if (qm_port == null || qm_port.isEmpty()) {
                 qm_port = "61616";  // Default to localhost if not set (helpful for local testing)
             }

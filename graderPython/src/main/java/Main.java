@@ -88,7 +88,7 @@ public class Main {
         submission.results = new ArrayList<>();
 
         // Retrieve test cases from the database service
-        ArrayList<TestCase> testCases = new ArrayList<>();//getTestCasesFromService(submission.idProblem);
+        ArrayList<TestCase> testCases = getTestCasesFromService(submission.idProblem);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
 

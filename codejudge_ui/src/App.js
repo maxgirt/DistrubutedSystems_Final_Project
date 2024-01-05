@@ -30,10 +30,12 @@ function App() {
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState('python');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [problemId, setProblemId] = useState(1);
+  const [problemId, setProblemId] = useState("6596a2020d11dc2f923b3b63");
   const [results, setResults] = useState([])
   const [help, setHelp] = useState("You can always ask our Ai Chatbot for help!")
   const broker_port = process.env.BROKER_PORT;
+  const [problem, setProblem] = useState({})
+  const [problemIds, setProblemIds] = useState([])
   const handleChangeLanguage = (event) => {
     setLanguage(event.target.value);
   };
@@ -64,7 +66,7 @@ function App() {
 
     try {
       let response;
-      response = await axios.post('http://localhost:'+"8085"+'/submission', payload);
+      response = await axios.post('http://localhost:'+"8080"+'/submission', payload);
       // Handle the response as needed
       console.log(response)
       setResults(response.data.results)
@@ -80,8 +82,10 @@ function App() {
   useEffect(() => {
     const fetchProblemDescription = async () => {
       try {
-        const response = await axios.get(`'http://localhost:8085/problems/${problemId}`);
-        setProblemDescription(response.data.description);
+        console.log(problemId)
+        const response = await axios.get(`http://localhost:8080/problems/${problemId}`);
+        console.log(response)
+        setProblem(response.data);
       } catch (error) {
         console.error('Error fetching problem description:', error);
         setProblemDescription('Error fetching problem description.');
@@ -93,9 +97,26 @@ function App() {
     }
   }, [problemId]);
 
+  useEffect(() => {
+    const fetchProblemIds = async () => {
+      try {
+        console.log("GET PROBLEMS")
+        const response = await axios.get('http://localhost:8080/problems');
+        console.log(response)
+        setProblemIds(response.data.map(e=>e.id))
+        console.log(problemIds)
+      } catch (error) {
+        console.error('Error fetching problem description:', error);
+        setProblemDescription('Error fetching problem description.');
+      }
+    };
+
+    fetchProblemIds()
+  }, []);
+
   const handleAiAssistance = async () => {
     try {
-      const response = await axios.post('http://localhost:'+"8085"+'/ai_assistance', { request: code });
+      const response = await axios.post('http://localhost:'+"8080"+'/ai_assistance', { request: code });
       const aiResponse = response.data.request;
       setHelp(aiResponse)  // Append AI response to the code
     } catch (error) {
@@ -109,6 +130,8 @@ function App() {
     setCode(val);
   }, []);
 
+  console.log(problem)
+
   return (
       <div className="App">
         <header className="App-header">
@@ -119,19 +142,19 @@ function App() {
           <div className="problem-section">
             <select value={problemId} onChange={handleProblemIdChange}>
               {/* Populate with actual problem IDs */}
-              <option value="1">Problem 1</option>
-              <option value="2">Problem 2</option>
+              {problemIds.map((e, index) => {
+                return <option value={e}>Problem {index+1}</option>
+              })}
               {/* Add more options as needed */}
             </select>
-            <h2>Problem Name</h2>
-            <p>Description of the problem...</p>
+            <h2>{problem.title}</h2>
+            <p>{problem.description}</p>
             <p>{help}</p>
             <SubmissionResults results={results} />
           </div>
           <div className="editor-section">
             <select value={language} onChange={handleChangeLanguage}>
               <option value="python">Python</option>
-              <option value="c++">C++</option>
               <option value="java">Java</option>
             </select>
             <CodeMirror
