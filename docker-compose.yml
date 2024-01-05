@@ -91,15 +91,15 @@ services:
     networks:
       - judge_network
 
-#  client:
-#    build: codejudge_ui
-#    depends_on:
-#      - broker
-#    ports:
-#      - "3000:3000"
-#      - "80:80"
-#    environment:
-#      - BROKER_PORT=8080
+  client:
+    build: codejudge_ui
+    depends_on:
+      - broker
+    ports:
+      - "3000:3000"
+      - "80:80"
+    environment:
+      - BROKER_PORT=8080
 
 networks:
   judge_network:

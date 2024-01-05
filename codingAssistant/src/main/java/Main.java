@@ -94,7 +94,7 @@ public class Main {
                         aiResponseMessage.setJMSCorrelationID(String.valueOf(request.getId()));
                         producer.send(message.getJMSReplyTo(), aiResponseMessage);
 
-                    } catch (JMSException | IOException e) {
+                    } catch (JMSException e) {
                         throw new RuntimeException(e);
                     }
                 }

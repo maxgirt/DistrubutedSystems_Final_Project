@@ -1,7 +1,11 @@
 Read me for our project! 
 
-
-
+# Running the project
+´´´
+mvn package
+docker-compose up --build
+´´´
+The frontend is accessible at localhost:3000
 
 # Setting up MongoDB #
 
