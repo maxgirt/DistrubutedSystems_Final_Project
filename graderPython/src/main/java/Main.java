@@ -45,8 +45,16 @@ public class Main {
         }
     }
 
+    private static String getDatabaseHost(){
+        String databasename = System.getenv("DATABASE_NAME");
+        if (databasename == null || databasename.isEmpty()) {
+            databasename = "localhost";  // Default to localhost if not set (helpful for local testing)
+        }
+        return databasename;
+    }
+
     private static ArrayList<TestCase> getTestCasesFromService(String idProblem) {
-        String urlString = "http://localhost:8083/problems/" + idProblem + "/testcases"; 
+        String urlString = "http://"+getDatabaseHost()+":8083/problems/" + idProblem + "/testcases";
         ArrayList<TestCase> testCases = new ArrayList<>();
         try {
             URL url = new URL(urlString);
@@ -80,7 +88,7 @@ public class Main {
         submission.results = new ArrayList<>();
 
         // Retrieve test cases from the database service
-        ArrayList<TestCase> testCases = getTestCasesFromService(submission.idProblem);
+        ArrayList<TestCase> testCases = new ArrayList<>();//getTestCasesFromService(submission.idProblem);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -136,11 +144,11 @@ public class Main {
         try{
 
 
-            String qm_serverHost = System.getenv("QM_SERVER_HOST");
+            String qm_serverHost = System.getenv("MQ_SERVER_HOST");
             if (qm_serverHost == null || qm_serverHost.isEmpty()) {
                 qm_serverHost = "localhost";  // Default to localhost if not set (helpful for local testing)
             }
-            String qm_port = System.getenv("QM_SERVER_PORT");
+            String qm_port = System.getenv("MQ_SERVER_PORT");
             if (qm_port == null || qm_port.isEmpty()) {
                 qm_port = "61616";  // Default to localhost if not set (helpful for local testing)
             }
@@ -169,6 +177,7 @@ public class Main {
                         Submission submission = (Submission) ((ObjectMessage) message).getObject();
 
                         // Judge the submission
+                        System.out.println("Judging Code");
                         submission = judge(submission);
 
                         // Send the response back to the broker
