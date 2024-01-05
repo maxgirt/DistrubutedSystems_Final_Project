@@ -4,8 +4,9 @@ services:
     container_name: activemq
     image: rmohr/activemq:latest
     ports:
-      - "8160:8160"
-      - "61610:61610"
+      - "8161:8161"
+      - "61616:61616"
+
     networks:
       - judge_network
 
@@ -23,13 +24,11 @@ services:
     depends_on:
       - activemq
     environment:
-      - HOSTNAME=activeqm
-      - SERVER_PORT=8085
+      - SERVER_PORT=8080
+    ports:
+      - "8080:8080"
     networks:
       - judge_network
-    ports:
-      - "8085:8085"
-      - "8080:8080"
 #
 #  database:
 #    build: database
@@ -72,7 +71,7 @@ services:
 #      - "3000:3000"
 #      - "80:80"
 #    environment:
-#      - BROKER_PORT=8085
+#      - BROKER_PORT=8080
 
 networks:
   judge_network:
