@@ -16,7 +16,7 @@ import service.message.AiResponse;
 
 public class Main {
     private static final String API_URL = "https://api-inference.huggingface.co/models/TinyLlama/TinyLlama-1.1B-Chat-v1.0";
-    private static final String TOKEN = "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"; // Replace with your token
+    private static final String TOKEN = "XXX"; // Replace with your token
 
 
 
@@ -57,7 +57,9 @@ public class Main {
                     try {
                         AiRequest request = (AiRequest) ((ObjectMessage) message).getObject();
 
-                        URL url = new URL(API_URL);
+                        //This Code would query the API
+                        String resultWithoutPrompt = "The code is subtracting to numbers instead of adding them. You might want to replace return int(a)-int(b) with int(a)+int(b)";
+                       /* URL url = new URL(API_URL);
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("POST");
                         conn.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -83,7 +85,7 @@ public class Main {
                         String result = response.toString();
                         jsonInputString = jsonInputString.replaceFirst("inputs", "generated_text");
                         int lengthToRemove = jsonInputString.length();
-                        String resultWithoutPrompt = result.substring(lengthToRemove);
+                        String resultWithoutPrompt = result.substring(lengthToRemove);*/
 
                         // Send the response back to the broker
                         AiResponse aiResponse = new AiResponse(resultWithoutPrompt, request.getId());

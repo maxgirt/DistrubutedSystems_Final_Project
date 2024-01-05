@@ -169,10 +169,11 @@ public class Main {
 
             MessageConsumer consumer = session.createConsumer(submissions);
             MessageProducer producer = session.createProducer(null);
+            String finalGrader_id = grader_id;
             consumer.setMessageListener(new MessageListener() {
                 @Override
                 public void onMessage(Message message) {
-                    System.out.println("Processing Message");
+                    System.out.println(finalGrader_id + " PROCESSING MESSAGE");
                     try {
                         Submission submission = (Submission) ((ObjectMessage) message).getObject();
 

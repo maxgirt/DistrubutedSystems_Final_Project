@@ -43,7 +43,7 @@ services:
     ports:
       - "8083:8083"
 
-  grader_python:
+  grader_python1:
     build: graderPython
     depends_on:
       - broker
@@ -51,6 +51,18 @@ services:
       - MQ_SERVER_HOST=activemq
       - MQ_SERVER_PORT=61616
       - GRADER_ID=grader_python_1
+      - DATABASE_NAME=database
+    networks:
+      - judge_network
+
+  grader_python2:
+    build: graderPython
+    depends_on:
+      - broker
+    environment:
+      - MQ_SERVER_HOST=activemq
+      - MQ_SERVER_PORT=61616
+      - GRADER_ID=grader_python_2
       - DATABASE_NAME=database
     networks:
       - judge_network

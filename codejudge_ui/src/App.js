@@ -167,7 +167,7 @@ function App() {
                 }}
                 />
             <div className="buttons">
-              <button onClick={handleSubmit} disabled={isSubmitting}>Submit Code</button>
+              <button onClick={handleSubmit}>Submit Code</button>
               <button onClick={handleAiAssistance}>Get AI Assistance</button>
             </div>
           </div>
