@@ -7,7 +7,9 @@ Collaborators:
 - Nataël Baffou
 - Dorian Bernard
 
-Report link: [Report](Report_Nimbus2001.pdf)
+[Project report](Report_Nimbus2001.pdf)
+
+[Explanation video](https://drive.google.com/file/d/1cgsAqq5HqoibQqLkn0vca4qBfyzbOpVG/view)
 
 # Running the project
 ```
