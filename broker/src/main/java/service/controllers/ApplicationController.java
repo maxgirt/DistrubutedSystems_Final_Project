@@ -51,7 +51,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class ApplicationController {
     public final int PortDatabase = 8083;
     private Session session;
